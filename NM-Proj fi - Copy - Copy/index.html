@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Art Gallery</title>
+    <link rel="stylesheet" href="stylehome.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+       
+        .banner {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.7));
+            z-index: 0;
+        }
+        .banner video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+        .banner-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 1;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background:rgba(68, 81, 206, 0.973);
+            color: #fff;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+   
+    <nav>
+            <ul>
+                <li>
+                    <a href="index.html">HOME</a>
+                </li>
+                <li>
+                    <a href="/pro2.html">Chat with AI</a>
+                </li>
+                <li>
+                    <a href="/about.html">about</a>
+                </li>
+            </ul>
+    </nav>
+
+
+    <section>
+        <div class="banner">
+            <video autoplay loop muted>
+                <source src="vg-showreel-www-bluetint-720p.mp4" type="video/mp4">
+               
+                Your browser does not support the video tag.
+            </video>
+            <div class="banner-text">
+                <h1><span class="ex">Explore</span> the Virtual <br> <span>Art Gallery</span></h1>
+                <p>Discover a curated selection of stunning artworks from artists around the world. Immerse yourself in a virtual tour that brings the gallery experience to your screen.</p>
+                <a href="/index3d.html" class="btn">Start Tour</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

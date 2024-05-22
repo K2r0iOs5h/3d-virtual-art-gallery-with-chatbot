@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/aboutstyle.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: inline;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            
+            position: relative;
+            height: 460px;
+            
+        }
+
+        .card-container {
+            position: relative;
+            transition: opacity 0.3s;
+        }
+
+        .card {
+            
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+            width: 250px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: block;
+            object-fit: cover;
+            border: 3px solid #ddd;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card h2 {
+            margin: 10px 0;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .card p {
+            color: #777;
+            margin: 10px 0;
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            width: 300px;
+            text-align: left;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: visibility 0.3s, opacity 0.3s;
+        }
+
+        .popup img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 10px 0;
+            object-fit: cover;
+            border: 2px solid #ddd;
+        }
+
+        .popup h2 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .popup p {
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .container:hover .card {
+            opacity: 0.5;
+        }
+
+        .container .card-container:hover .card {
+            opacity: 1;
+        }
+
+        .container .card-container:hover .popup {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<nav>
+    <DIv>
+        <ul>
+            <li>
+                <a href="/index.html">Home</a>
+            </li>
+            <li>
+                <a href="/pro2.html">Chat with AI</a>
+            </li>
+            <li>
+                <a href="/about.html">about</a>
+            </li>
+        </ul>
+</nav>
+<body>
+    <div class="container">
+        <div class="card-container" onmouseover="showPopup('member1')" onmouseout="hidePopup('member1')">
+            <div class="card">
+                <img src="/WhatsApp Image 2024-05-21 at 21.22.17_39c15b68.jpg" alt="John Doe">
+                <div class="card-content">
+                    <h2>Krishna</h2>
+                    <p>Lead Developer</p>
+                </div>
+            </div>
+            <div id="popup-member1" class="popup">
+                <img src="/WhatsApp Image 2024-05-21 at 21.22.17_39c15b68.jpg" alt="John Doe">
+                <h2>Krishna</h2>
+                <p>Lead Developer</p>
+                <p>Email: krishna2005official.gmail.com</p>
+                <p>Phone: 6369150106</p>
+            </div>
+        </div>
+        <div class="card-container" onmouseover="showPopup('member2')" onmouseout="hidePopup('member2')">
+            <div class="card">
+                <img src="/bhart.jpg" alt="Jane Smith">
+                <div class="card-content">
+                    <h2>Bharath</h2>
+                    <p>Project Manager</p>
+                </div>
+            </div>
+            <div id="popup-member2" class="popup">
+                <img src="/bhart.jpg" alt="Jane Smith">
+                <h2>Bharath E</h2>
+                <p>Project Manager</p>
+                <p>Email: bharaththarun2255@gmail.com</p>
+                <p>Phone:9043387625 </p>
+            </div>
+        </div>
+        <div class="card-container" onmouseover="showPopup('member3')" onmouseout="hidePopup('member3')">
+            <div class="card">
+                <img src="/bonda.jpg" alt="Emily Johnson">
+                <div class="card-content">
+                    <h2>Bhuvanesh</h2>
+                    <p>UI/UX Designer</p>
+                </div>
+            </div>
+            <div id="popup-member3" class="popup">
+                <img src="/bonda.jpg" alt="Emily Johnson">
+                <h2>Bhuvanesh</h2>
+                <p>UI/UX Designer</p>
+                <p>Email: bhuvaneshsekar04@gmail.com</p>
+                <p>Phone: 9597644416</p>
+            </div>
+        </div>
+        <div class="card-container" onmouseover="showPopup('member4')" onmouseout="hidePopup('member4')">
+            <div class="card">
+                <img src="/nk.jpg" alt="Michael Brown">
+                <div class="card-content">
+                    <h2>NK</h2>
+                    <p>Software Engineer</p>
+                </div>
+            </div>
+            <div id="popup-member4" class="popup">
+                <img src="/nk.jpg" alt="Michael Brown">
+                <h2>NK</h2>
+                <p>Software Engineer</p>
+                <p>Email: navaneethakannanindia7@gmail.com</p>
+                <p>Phone: 6369044958</p>
+            </div>
+        </div>
+    </div>
+ 
+
+
+
+    <script>
+        function showPopup(memberId) {
+            const popup = document.getElementById(popup-(memberId));
+            popup.style.display = 'block';
+        }
+
+        function hidePopup(memberId) {
+            const popup = document.getElementById(popup-(memberId));
+            popup.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

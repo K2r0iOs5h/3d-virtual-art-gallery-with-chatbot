@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
+    <link rel="stylesheet" href="/chatbot.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+</head>
+<body>
+    <nav>
+        <ul>
+          <li>
+            <a href="/index.html">Home</a>
+          </li>
+          <li>
+            <a href="/pro2.html">Chat with AI</a>
+          </li>
+          <li>
+            <a href="/about.html">about</a>
+          </li>
+        </ul>
+      </nav>
+    
+    
+    <div class="chat-container">
+      
+        <div class="chat-header">
+            <img src="/p4dp9nec-removebg-preview.png" alt="ChatBot Logo" class="chat-logo">
+            <h1 class="chat-name">ChatBot</h1>
+        </div>
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type a message...">
+        <button onclick="sendMessage()" class="send-but"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+    
+
+    <script >
+      document.getElementById("user-input").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+
+    function sendMessage() {
+        var message = document.getElementById("user-input").value;
+        document.getElementById("user-input").value = "";
+        appendMessage("user", message);
+
+        // Show loading animation
+        appendLoading();
+
+        setTimeout(function() {
+            var response = generateResponse(message);
+
+            // Remove loading animation
+            removeLoading();
+
+            appendMessage("chatbot", response);
+        }, 300); // Simulate a delay for the chatbot response
+    }
+
+    function generateResponse(message) {
+        message = message.toLowerCase().trim();
+
+        const responses = {
+            greetings: ["Hello!", "Hi there!", "Hey!", "what's up","hi","what do you want?","yeah","hai","hello","hey"],
+            endcon: ["Goodbye!", "See you later!", "Take care!","Bye","Bye have a good day!","bye bye", "see you later","good bye","Take care","bye","take care","Good bye"],
+            monaLisa: "The Mona Lisa is a portrait painting by Leonardo da Vinci.",
+            monaLisayear:"mona lisa was painted in year c.1503-1506,perhaps continuing until c.1517",
+            monaLisalocation: "Currently it is in Louvre,Paris.", 
+            monaLisadimensions:"It's 77 cm X 53 cm (30 inch X 21 inch)",
+            monaLisa_about:"The Mona Lisa (/ˌmoʊnə ˈliːsə/ MOH-nə LEE-sə; Italian: Gioconda [dʒoˈkonda] or Monna Lisa [ˈmɔnna ˈliːza]; French: Joconde [ʒɔkɔ̃d]) is a half-length portrait painting by Italian artist Leonardo da Vinci. Considered an archetypal masterpiece of the Italian Renaissance,[4][5] it has been described as the best known, the most visited, the most written about, the most sung about, [and] the most parodied work of art in the world.[6] The painting's novel qualities include the subject's enigmatic expression,[7] monumentality of the composition, the subtle modelling of forms, and the atmospheric illusionism.[8]",
+            napoleoncrossingthealps: " the napoleon crossing the alps eas painted by Jacques-Louis David",
+            napoleoncrossingthealpsyear:" it is painted in the year 1801",
+            napoleoncrossingthealpslocation: "it is located in Château de Malmaison, Rueil-Malmaison.", 
+            napoleoncrossingthealpsdimensions:"the dimension is 261 cm × 221 cm (102+1⁄3 in × 87 in)",
+            napoleoncrossingthealpsabout:" Napoleon Crossthe Alpsing  (also known as Napoleon at the Saint-Bernard Pass or Bonaparte Crossing the Alps; listed as Le Premier Consul franchissant les Alpes au col du Grand Saint-Bernard) is a series of five oil on canvas equestrian portraits of Napoleon Bonaparte painted by the French artist Jacques-Louis David between 1801 and 1805. Initially commissioned by the King of Spain, the composition shows a strongly idealized view of the real crossing that Napoleon and his army made along the Alps through the Great St Bernard Pass in May 1800.",
+            thekiss: "The Kiss is a famous painting by the Austrian symbolist painter Gustav Klimt.",
+            thekissyear:"The Kiss by Gustav Klimt was completed between 1907 and 1908.",
+            thekisslocation: " It is located in the Belvedere Museum in Vienna, austria", 
+            thekissdimensions:" The Kiss measures approximately 180 cm by 180 cm (about 71 inches by 71 inches).",
+            thekissabout:"Gustav Klimt's The Kiss, painted between 1907 and 1908, is a quintessential work of the Viennese Art Nouveau (Jugendstil) movement and a highlight of Klimt's Golden Phase. The painting captures a couple locked in a passionate embrace, their bodies entwined in elaborate, gold-embellished robes. This use of gold leaf, inspired by Byzantine mosaics, contributes to the painting's luxurious and ethereal quality.",
+            the_starry_night: "The starry night is a portrait painting by vincent van gogh.",
+            snyear:"The starry night was painted in year 1889",
+            snlocation: "Museum of Modern Art, New York.", 
+            sndimensions:"73.7 cm × 92.1 cm (29.01 in × 36.26 in)",
+            snabout:" The Starry Night (Dutch: De sterrennacht) is an oil-on-canvas painting by the Dutch Post-Impressionist painter Vincent van Gogh painted in June 1889. It depicts the view from the east-facing window of his asylum room at Saint-Rémy-de-Provence, just before sunrise, with the addition of an imaginary village.[1][2][3] It has been in the permanent collection of the Museum of Modern Art in New York City since 1941, acquired through the Lillie P. Bliss Bequest. Widely regarded as Van Gogh's magnum opus,[4] The Starry Night is one of the most recognizable paintings in Western art",
+            TheGreatWaveoffKanagawa: " The Great Wave off Kanagawa is a portrait painted by Katsushika Hokusai.",
+            TheGreatWaveoffKanagawa_year: "The Great Wave  off Kanagawa was painted in year 1831.",
+            TheGreatWaveoffKanagawa_location: "Currently it is in The Sumida Hokusai museum",
+            TheGreatWaveoffKanagawa_dimensions: "It's 25.7 cm × 37.9 cm (10.1 in × 14.9 in)",
+            TheGreatWaveoffKanagawa_about: "The Great Wave off Kanagawa is set at Kanagawa-juku, one of the stations on the Eastern Sea Route, called the Tokaido. According to analysis by Cartwright and Nakamura (2009), the boats are located in Edo (Tokyo) Bay off Yokohama in present-day Kanagawa Prefecture, with Edo to the north and Mount Fuji to the west.",
+            
+
+
+
+
+
+        };
+ if (["Hello!", "Hi there!", "Hey!", "what's up","hi","what do you want?","yeah","hai","hey","hello"].includes(message)) {
+                return responses.greetings[Math.floor(Math.random() * responses.greetings.length)];
+            }else if(["Bye","Bye have a good day!","bye bye", "see you later","good bye","Take care","bye","take care","Good bye"].includes(message)) {
+                return responses.endcon[Math.floor(Math.random() * responses.endcon.length)];
+            }else if (message.includes("mona lisa") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.monaLisa;
+            } else if (message.includes("monalisa") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Mona lisa") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Monalisa") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Mona Lisa") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.monaLisa;
+            }else if (message.includes("mona lisa") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.monaLisa;
+            }else if (message.includes("monalisa") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.monaLisa
+            }else if (message.includes("Mona lisa") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Monalisa") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Mona Lisa") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.monaLisa;
+            }else if (message.includes("mona lisa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.monaLisa;
+            }else if (message.includes("monalisa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Mona lisa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Monalisa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.monaLisa
+            }else if (message.includes("Mona Lisa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.monaLisa;
+            }else if (message.includes("mona lisa") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.monaLisa;
+            }else if (message.includes("monalisa") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Mona lisa") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Monalisa") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.monaLisa;
+            }else if (message.includes("Mona Lisa") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.monaLisa;
+            }else if (message.includes("mona lisa") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.monaLisayear;
+            }else if (message.includes("monalisa") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.monaLisayear;
+            }else if (message.includes("Mona lisa") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.monaLisayear;
+            }else if (message.includes("Monalisa") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.monaLisayear;
+            }else if (message.includes("Mona Lisa") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.monaLisayear;
+            }else if (message.includes("mona lisa") && (message.includes("location") || message.includes("located"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("monalisa") && (message.includes("location") || message.includes("located"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("Mona lisa") && (message.includes("location") || message.includes("located"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("Monalisa") && (message.includes("location") || message.includes("located"))) {
+                return responses.monaLisalocatoin;
+            }else if (message.includes("Mona Lisa") && (message.includes("location") || message.includes("located"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("mona lisa") && (message.includes("kept") || message.includes("place"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("monalisa") && (message.includes("kept") || message.includes("place"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("Mona lisa") && (message.includes("kept") || message.includes("place"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("Monalisa") && (message.includes("kept") || message.includes("place"))) {
+                return responses.monaLisalocatoin;
+            }else if (message.includes("Mona Lisa") && (message.includes("kept") || message.includes("place"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("mona lisa") && (message.includes("Where is") || message.includes("currently"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("monalisa") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("Mona lisa") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("Monalisa") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.monaLisalocatoin;
+            }else if (message.includes("Mona Lisa") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.monaLisalocation;
+            }else if (message.includes("mona lisa") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("monalisa") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("Mona lisa") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("Monalisa") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("Mona Lisa") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("mona lisa") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("monalisa") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("Mona lisa") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("Monalisa") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("Mona Lisa") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.monaLisadimensions;
+            }else if (message.includes("mona lisa") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.monaLisa_about;
+            }else if (message.includes("monalisa") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.monaLisa_about;
+            }else if (message.includes("Mona lisa") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.monaLisa_about;
+            }else if (message.includes("Monalisa") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.monaLisa_about;
+            }else if (message.includes("Mona Lisa") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.monaLisa_about;
+            } else if (message.includes("napoleoncrossingthealps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            } else if (message.includes("napoleon crossing the alps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleoncrossingthealps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("drew by") || message.includes("sketched")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the aps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("Where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("napoleon crossing the alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            } else if (message.includes("napoleon crossing the lps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleoncrossingthealps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                    return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                    return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("painted by") || message.includes("outlined"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("painted by") || message.includes("outlined"))) {
+                return responses.napoleoncrossingthealps;    
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleon") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation; 
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("Where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("napoleon") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            } else if (message.includes("napoleon crossing the lps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleoncrossingthealps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("painted by") || message.includes("outlined"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("painted by") || message.includes("outlined"))) {
+                return responses.napoleoncrossingthealps;    
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("Napoleon") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleon") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.napoleoncrossingthealps;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("Napoleon") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleon") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.napoleoncrossingthealpsyear;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon") && (message.includes("location") || message.includes("located"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon") && (message.includes("kept") || message.includes("place"))) {
+                return responses.napoleoncrossingthealpslocation; 
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("Where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocatoin;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("Napoleon") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleon") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.napoleoncrossingthealpslocation;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("Napoleon") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleon") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.napoleoncrossingthealpsdimensions;
+            }else if (message.includes("napoleoncrossingthealps") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("napoleon crossing the lps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon crossing the alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon Crossing The Alps") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("Napoleon") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("napoleon") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.napoleoncrossingthealpsabout;
+            }else if (message.includes("the starry night") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.the_starry_night;
+            } else if (message.includes("thestarrynight") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The Starry Night") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The starry night") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("starry night") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("the starry night") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("thestarrynight") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The Starry Night") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The starry night") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("starry night") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("the starry night") && (message.includes("drew by") || message.includes("sketched")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("thestarrynight") && (message.includes("drew by") || message.includes("sketched")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The Starry Night") && (message.includes("drew by") || message.includes("sketched")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The starry night") && (message.includes("drew by") || message.includes("sketched")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("starry night") && (message.includes("drew by") || message.includes("sketched")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("the starry night") && (message.includes("draw") || message.includes("drawn")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("thestarrynight") && (message.includes("draw") || message.includes("drawn")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The Starry Night") && (message.includes("draw") || message.includes("drawn")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("The starry night") && (message.includes("draw") || message.includes("drawn")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("starry night") && (message.includes("draw") || message.includes("drawn")|| message.includes("who painted"))) {
+                return responses.the_starry_night;
+            }else if (message.includes("the starry night") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.snyear;
+            }else if (message.includes("thestarrynight") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.snyear;
+            }else if (message.includes("The Starry Night") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.snyear;
+            }else if (message.includes("The starry night") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.snyear;
+            }else if (message.includes("starry night") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.snyear;
+            }else if (message.includes("the starry night") && (message.includes("location") || message.includes("located"))) {
+                return responses.snlocation;
+            }else if (message.includes("thestarrynight") && (message.includes("location") || message.includes("located"))) {
+                return responses.snlocation;
+            }else if (message.includes("The Starry Night") && (message.includes("location") || message.includes("located"))) {
+                return responses.snlocation;
+            }else if (message.includes("The starry night") && (message.includes("location") || message.includes("located"))) {
+                return responses.snlocatoin;
+            }else if (message.includes("starry night") && (message.includes("location") || message.includes("located"))) {
+                return responses.snlocation;
+            }else if (message.includes("the starry night") && (message.includes("kept") || message.includes("place"))) {
+                return responses.snlocation;
+            }else if (message.includes("thestarrynight") && (message.includes("kept") || message.includes("place"))) {
+                return responses.snlocation;
+            }else if (message.includes("The Starry Night") && (message.includes("kept") || message.includes("place"))) {
+                return responses.snlocation;
+            }else if (message.includes("The starry night") && (message.includes("kept") || message.includes("place"))) {
+                return responses.snlocatoin;
+            }else if (message.includes("starry night") && (message.includes("kept") || message.includes("place"))) {
+                return responses.snlocation;
+            }else if (message.includes("the starry night") && (message.includes("Where is") || message.includes("currently"))) {
+                return responses.snlocation;
+            }else if (message.includes("thestarrynight") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.snlocation;
+            }else if (message.includes("The Starry Night") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.snlocation;
+            }else if (message.includes("The starry night") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.snlocatoin;
+            }else if (message.includes("the starry night") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.snlocation;
+            }else if (message.includes("the starry night") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.sndimensions;
+            }else if (message.includes("thestarrynight") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.sndimensions;
+            }else if (message.includes("The Starry Night") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.sndimensions;
+            }else if (message.includes("The starry night") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.sndimensions;
+            }else if (message.includes("starry night") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.sndimensions;
+            }else if (message.includes("the starry night") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.sndimensions;
+            }else if (message.includes("thestarrynight") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.sndimensions;
+            }else if (message.includes("The Starry Night") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.sndimensions;
+            }else if (message.includes("The starry night") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.sndimensions;
+            }else if (message.includes("starry night") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.sndimensions;
+            }else if (message.includes("the starry night") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.snabout;
+            }else if (message.includes("thestarrynight") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.snabout;
+            }else if (message.includes("The Starry Night") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.snabout;
+            }else if (message.includes("The starry night") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.snabout;
+            }else if (message.includes("starry night") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.snabout;
+            } else if (message.includes("The kiss") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.thekiss;
+            } else if (message.includes("the kiss") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.thekiss;
+            }else if (message.includes("thekiss") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.thekiss;
+            }else if (message.includes("Thekiss") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.thekiss;
+            }else if (message.includes("The Kiss") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.thekiss;
+            }else if (message.includes("The kiss") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.thekiss;
+            }else if (message.includes("the kiss") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.thekiss;
+            }else if (message.includes("thekiss") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.thekiss;
+            }else if (message.includes("Thekiss") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.thekiss;
+            }else if (message.includes("The Kiss") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.thekiss;
+            }else if (message.includes("The kiss") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.thekiss;
+            }else if (message.includes("the kiss") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.thekiss;
+            }else if (message.includes("thekiss") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.thekiss;
+            }else if (message.includes("Thekiss") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.thekiss;
+            }else if (message.includes("The Kiss") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.thekiss;
+            }else if (message.includes("The kiss") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.thekiss;
+            }else if (message.includes("the kiss") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.thekiss;
+            }else if (message.includes("thekiss") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.thekiss;
+            }else if (message.includes("Thekiss") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.thekiss;
+            }else if (message.includes("The Kiss") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.thekiss;
+            }else if (message.includes("The kiss") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.thekissyear;
+            }else if (message.includes("the kiss") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.thekissyear;
+            }else if (message.includes("thekiss") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.thekissyear;
+            }else if (message.includes("Thekiss") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.thekissyear;
+            }else if (message.includes("The Kiss") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.thekissyear;
+            }else if (message.includes("The kiss") && (message.includes("location") || message.includes("located"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("the kiss") && (message.includes("location") || message.includes("located"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("thekiss") && (message.includes("location") || message.includes("located"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("Thekiss") && (message.includes("location") || message.includes("located"))) {
+                return responses.thekisslocatoin;
+            }else if (message.includes("The Kiss") && (message.includes("location") || message.includes("located"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("The kiss") && (message.includes("kept") || message.includes("place"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("the kiss") && (message.includes("kept") || message.includes("place"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("thekiss") && (message.includes("kept") || message.includes("place"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("Thekiss") && (message.includes("kept") || message.includes("place"))) {
+                return responses.thekisslocatoin;
+            }else if (message.includes("The Kiss") && (message.includes("kept") || message.includes("place"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("The kiss") && (message.includes("Where is") || message.includes("currently"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("the kiss") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("thekiss") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("The kiss") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.thekisslocatoin;
+            }else if (message.includes("The Kiss") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.thekisslocation;
+            }else if (message.includes("The kiss") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("the kiss") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("thekiss") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("The kiss") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("The Kiss") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("The kiss") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("the kiss") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("thekiss") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("The kiss") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("The Kiss") && (message.includes("size") || message.includes("length")|| message.includes("height")|| message.includes("breadth"))) {
+                return responses.thekissdimensions;
+            }else if (message.includes("The kiss") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.thekissabout;
+            }else if (message.includes("the kiss") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.thekissabout;
+            }else if (message.includes("thekiss") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.thekissabout;
+            }else if (message.includes("The kiss") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.thekissabout;
+            }else if (message.includes("The Kiss") && (message.includes("about") || message.includes("describe")|| message.includes("explain")|| message.includes("what is"))) {
+                return responses.thekissabout;
+            }else if (message.includes("The Great Wave off Kanagawa") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("thegreatwave") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("Great Wave") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("great wave") && (message.includes("artist") || message.includes("drawn")|| message.includes("painter"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("thegreatwave") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("Great Wave") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("great wave") && (message.includes("painted by") || message.includes("outlined")|| message.includes("who painted"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("thegreatwave") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("great wave") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("Great Wave") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("drew by") || message.includes("sketched"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("Great Wave") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("thegreatwave") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("great wave") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("draw") || message.includes("drawn"))) {
+                return responses.TheGreatWaveoffKanagawa;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.TheGreatWaveoffKanagawa_year;
+            } else if (message.includes("Great Wave") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.TheGreatWaveoffKanagawa_year;
+            } else if (message.includes("the great wave") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.TheGreatWaveoffKanagawa_year;
+            } else if (message.includes("thegreatwave") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.TheGreatWaveoffKanagawa_year;
+            } else if (message.includes("great wave") && (message.includes("year") || message.includes("painted year"))) {
+                return responses.TheGreatWaveoffKanagawa_year;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("year") || message.includes(" painted year"))) {
+                return responses.TheGreatWaveoffKanagawa_year;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("location") || message.includes("located"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("Great Wave") && (message.includes("location") || message.includes("located"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("the great wave") && (message.includes("location") || message.includes("located"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("great wave") && (message.includes("location") || message.includes("located"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("thegreatwave") && (message.includes("location") || message.includes("located"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("location") || message.includes("located"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("kept") || message.includes("place"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("Great Wave") && (message.includes("kept") || message.includes("place"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("the great wave") && (message.includes("kept") || message.includes("place"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("thegreatwave") && (message.includes("kept") || message.includes("place"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("great wave") && (message.includes("kept") || message.includes("place"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("kept") || message.includes("place"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("Where is") || message.includes("currently"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("Great Wave") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("the great wave") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("thegreatwave") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("great wave") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("where is") || message.includes("currently"))) {
+                return responses.TheGreatWaveoffKanagawa_location;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("Great Wave") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("the great wave") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("thegreatwave") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("great wave") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("dimensions") || message.includes("dimension"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("THe Great Wave off Kanagawa") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("Great Wave") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("the great wave") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("thegreatwave") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("great wave") && (message.includes("size") || message.includes("length") || message.includes("height") || message.includes("breadth"))) {
+                return responses.TheGreatWaveoffKanagawa_dimensions;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.TheGreatWaveoffKanagawa_about;
+            } else if (message.includes("The Great Wave off Kanagawa") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.TheGreatWaveoffKanagawa_about;
+            } else if (message.includes("the great wave off kanagawa") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.TheGreatWaveoffKanagawa_about;
+            } else if (message.includes("Great Wave") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.TheGreatWaveoffKanagawa_about;
+            } else if (message.includes("the great wave") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.TheGreatWaveoffKanagawa_about;
+            } else if (message.includes("great wave") && (message.includes("about") || message.includes("describe") || message.includes("explain") || message.includes("what is"))) {
+                return responses.TheGreatWaveoffKanagawa_about;
+            }else {
+                return " Sorry, I don't understand. Can you ask something else and correct the spelling... ";
+            }
+        }
+    function appendLoading() {
+        var chatBox = document.getElementById("chat-box");
+        var loadingContainer = document.createElement("div");
+        loadingContainer.className = "message-container chatbot loading";
+
+        var profilePicture = document.createElement("img");
+        profilePicture.className = "profile-picture";
+        profilePicture.src = "/p4dp9nec (1).png";
+
+        var loadingBubble = document.createElement("div");
+        loadingBubble.className = "loading-bubble";
+        loadingBubble.innerHTML = `
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        `;
+
+        loadingContainer.appendChild(profilePicture);
+        loadingContainer.appendChild(loadingBubble);
+        chatBox.appendChild(loadingContainer);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function removeLoading() {
+        var chatBox = document.getElementById("chat-box");
+        var loadingElements = document.getElementsByClassName("loading");
+        while (loadingElements[0]) {
+            chatBox.removeChild(loadingElements[0]);
+        }
+    }
+
+    function appendMessage(sender, message) {
+        var chatBox = document.getElementById("chat-box");
+        var messageContainer = document.createElement("div");
+        messageContainer.className = `message-container ${sender}`;
+
+        var profilePicture = document.createElement("img");
+        profilePicture.className = "profile-picture";
+        profilePicture.src = sender === "user" ? "/391n3yhj.png" : "/p4dp9nec.png";
+
+        var messageBubble = document.createElement("div");
+        messageBubble.className = "message-bubble";
+        messageBubble.textContent = message;
+
+        messageContainer.appendChild(profilePicture);
+        messageContainer.appendChild(messageBubble);
+        chatBox.appendChild(messageContainer);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    </script>
+</body>
+</html>
