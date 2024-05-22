@@ -1,4 +1,4 @@
-Certainly! Here's a suggested description for your 3D virtual art gallery integrated with a chatbot for GitHub:
+
 
 ---
 
@@ -67,5 +67,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Built using open-source libraries and frameworks.
 
 ---
-
-Feel free to adapt this description to better match your project's specifics and any additional features you may have implemented.
